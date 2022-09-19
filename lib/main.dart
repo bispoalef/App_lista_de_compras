@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/pages/home_page.dart';
+import 'package:lista_compras/view/home_page.dart';
 
 void main() {
   runApp(const MyApp());
