@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lista_compras/models/lista_produtos.dart';
 import 'package:lista_compras/view/home_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ListaDeProdutos(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }

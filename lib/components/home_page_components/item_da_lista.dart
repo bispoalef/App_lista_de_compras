@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/controllers/home_controller.dart';
+import 'package:lista_compras/models/lista_produtos.dart';
 
 import '../../models/produto.dart';
 
@@ -7,11 +7,11 @@ class ItemDaLista extends StatefulWidget {
   const ItemDaLista({
     Key? key,
     required this.produto,
-    required this.controller,
+    required this.list,
   }) : super(key: key);
 
   final Produto produto;
-  final HomeController controller;
+  final ListaDeProdutos list;
 
   @override
   State<ItemDaLista> createState() => _ItemListaComponenteState();
@@ -41,6 +41,7 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                     onChanged: (bool? newValue) {
                       setState(() {
                         checkBox = newValue!;
+                        widget.list.removerProduto(widget.produto);
                       });
                     }),
                 Column(
@@ -68,7 +69,7 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () => widget.controller.removerItem(),
+                  onPressed: () {},
                   icon: const Icon(Icons.edit),
                 )
               ],

@@ -1,6 +1,6 @@
 class Produto {
   final int id;
-  String nome;
+  final String nome;
   final double preco;
   final int quantidade;
 

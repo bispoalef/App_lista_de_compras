@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/components/home_page_components/item_da_lista.dart';
-import 'package:lista_compras/controllers/home_controller.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
-import 'package:lista_compras/models/produto.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
+  late ListaDeProdutos lista = ListaDeProdutos();
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = HomeController(lista: ListaDeProdutos());
-
-    controller.getLista();
+    lista = Provider.of<ListaDeProdutos>(context);
 
     return Scaffold(
-      body: ValueListenableBuilder<List<Produto>>(
-        valueListenable: controller.listaDeProduto,
-        builder: (_, listaProd, __) => ListView.separated(
-          separatorBuilder: (_, __) => const Divider(
-            endIndent: 20,
-            indent: 20,
-          ),
-          itemCount: listaProd.length,
-          itemBuilder: ((context, index) =>
-              ItemDaLista(controller: controller, produto: listaProd[index])),
+      body: ListView.separated(
+        separatorBuilder: (_, __) => const Divider(
+          endIndent: 20,
+          indent: 20,
         ),
+        itemCount: lista.getLista.length,
+        itemBuilder: ((context, index) =>
+            ItemDaLista(list: lista, produto: lista.getLista[index])),
       ),
     );
   }
