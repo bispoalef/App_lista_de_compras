@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/models/produto.dart';
 
+import '../models/lista_produtos.dart';
+
 class EditarProduto extends StatelessWidget {
-  const EditarProduto({Key? key}) : super(key: key);
+  const EditarProduto({this.produto, this.list, Key? key}) : super(key: key);
+  final Produto? produto;
+  final ListaDeProdutos? list;
+
   @override
   Widget build(BuildContext context) {
-    final Produto produto =
-        ModalRoute.of(context)!.settings.arguments as Produto;
-
     TextEditingController controllerNome = TextEditingController();
+    TextEditingController controllerQuantidade = TextEditingController();
+    TextEditingController controllerPreco = TextEditingController();
 
     void Salvar() {
-      produto.setNome = controllerNome.text;
+      String nome = controllerNome.text;
+      double preco = double.parse(controllerPreco.text);
+      int quantidade = int.parse(controllerQuantidade.text);
+      list!.editarProduto(
+        produto!,
+        nome,
+        preco,
+        quantidade,
+      );
       Navigator.of(context).pop();
-
-      print(produto.nome);
     }
 
     return Scaffold(
@@ -25,14 +35,17 @@ class EditarProduto extends StatelessWidget {
             children: [
               TextField(
                 controller: controllerNome,
-                decoration: InputDecoration(hintText: produto.nome),
+                decoration: InputDecoration(hintText: produto!.nome),
               ),
               TextField(
-                decoration: InputDecoration(hintText: produto.preco.toString()),
-              ),
-              TextField(
+                controller: controllerPreco,
                 decoration:
-                    InputDecoration(hintText: produto.quantidade.toString()),
+                    InputDecoration(hintText: produto!.preco.toString()),
+              ),
+              TextField(
+                controller: controllerQuantidade,
+                decoration:
+                    InputDecoration(hintText: produto!.quantidade.toString()),
               ),
               ElevatedButton(onPressed: Salvar, child: const Text('Salvar'))
             ],

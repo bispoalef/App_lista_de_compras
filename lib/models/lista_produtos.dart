@@ -20,11 +20,15 @@ class ListaDeProdutos extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editarProduto(Produto produto) {
-    int index = _list.indexWhere((element) => element.id == produto.id);
-    _list[index].setNome = produto.nome;
-    _list[index].setPreco = produto.nome;
-    _list[index].setQuantidade = produto.nome;
+  void editarProduto(
+    Produto produto,
+    String nome,
+    double preco,
+    int quantidade,
+  ) {
+    produto.setNome = nome;
+    produto.setPreco = preco;
+    produto.setQuantidade = quantidade;
 
     notifyListeners();
   }
