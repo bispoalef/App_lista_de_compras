@@ -6,12 +6,12 @@ import '../../models/produto.dart';
 class ItemDaLista extends StatefulWidget {
   const ItemDaLista({
     Key? key,
-    required this.produto,
-    required this.list,
+    this.produto,
+    this.list,
   }) : super(key: key);
 
-  final Produto produto;
-  final ListaDeProdutos list;
+  final Produto? produto;
+  final ListaDeProdutos? list;
 
   @override
   State<ItemDaLista> createState() => _ItemListaComponenteState();
@@ -28,8 +28,8 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Container(
         decoration: BoxDecoration(
+          color: Colors.orangeAccent,
           borderRadius: BorderRadius.circular(10),
-          color: Colors.amber,
         ),
         height: size.height * 0.07,
         child: Column(
@@ -41,18 +41,18 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                     onChanged: (bool? newValue) {
                       setState(() {
                         checkBox = newValue!;
-                        widget.list.removerProduto(widget.produto);
+                        widget.list!.removerProduto(widget.produto!);
                       });
                     }),
                 Column(
                   children: [
                     Text(
-                      widget.produto.nome,
+                      widget.produto!.nome,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 17),
                     ),
                     Text(
-                      'Quantidade ${widget.produto.quantidade}',
+                      'Quantidade ${widget.produto!.quantidade}',
                       style: const TextStyle(
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.w300),
@@ -61,7 +61,7 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                 ),
                 Container(width: 20),
                 Text(
-                  'R\$ ${widget.produto.preco.toStringAsFixed(2)}',
+                  'R\$ ${widget.produto!.preco.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontSize: 20,
                       fontStyle: FontStyle.italic,
@@ -69,7 +69,10 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed('editarProduto', arguments: widget.produto);
+                  },
                   icon: const Icon(Icons.edit),
                 )
               ],
