@@ -27,6 +27,10 @@ class EditarProduto extends StatelessWidget {
       Navigator.of(context).pop();
     }
 
+    controllerNome.text = produto!.nome;
+    controllerPreco.text = '${produto!.preco}';
+    controllerQuantidade.text = '${produto!.quantidade}';
+
     return Scaffold(
         appBar: AppBar(),
         body: Padding(
@@ -35,17 +39,12 @@ class EditarProduto extends StatelessWidget {
             children: [
               TextField(
                 controller: controllerNome,
-                decoration: InputDecoration(hintText: produto!.nome),
               ),
               TextField(
                 controller: controllerPreco,
-                decoration:
-                    InputDecoration(hintText: produto!.preco.toString()),
               ),
               TextField(
                 controller: controllerQuantidade,
-                decoration:
-                    InputDecoration(hintText: produto!.quantidade.toString()),
               ),
               ElevatedButton(onPressed: Salvar, child: const Text('Salvar'))
             ],
