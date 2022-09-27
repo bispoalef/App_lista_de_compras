@@ -12,6 +12,9 @@ class HomePage extends StatelessWidget {
     lista = Provider.of<ListaDeProdutos>(context);
 
     return Scaffold(
+      appBar: AppBar(
+          title: const Center(child: Text('Lista de Comptras')),
+          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))]),
       body: ListView.separated(
         separatorBuilder: (_, __) => const Divider(
           endIndent: 20,

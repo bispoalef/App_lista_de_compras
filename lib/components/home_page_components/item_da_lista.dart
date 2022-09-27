@@ -19,7 +19,7 @@ class ItemDaLista extends StatefulWidget {
 }
 
 class _ItemListaComponenteState extends State<ItemDaLista> {
-  bool checkBox = true;
+  bool checkBox = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,6 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                     value: checkBox,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        checkBox = newValue!;
                         widget.list!.removerProduto(widget.produto!);
                       });
                     }),
