@@ -14,6 +14,16 @@ class ListaDeProdutos extends ChangeNotifier {
     notifyListeners();
   }
 
+  void inserirNoIndex(int index, Produto prod) {
+    _list.insert(index, prod);
+    notifyListeners();
+  }
+
+  removerNoIndex(int index) {
+    _list.removeAt(index);
+    notifyListeners();
+  }
+
   void removerProduto(Produto produto) {
     carrinho.add(produto);
     _list.remove(produto);
