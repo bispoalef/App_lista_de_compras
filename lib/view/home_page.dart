@@ -3,6 +3,8 @@ import 'package:lista_compras/components/home_page_components/item_da_lista.dart
 import 'package:lista_compras/models/lista_produtos.dart';
 import 'package:provider/provider.dart';
 
+import '../components/home_page_components/novo_produto_dialog.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -16,11 +18,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     lista = Provider.of<ListaDeProdutos>(context);
+    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('Lista de Comptras')),
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))]),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  novoProdutoDialog(context, size, lista);
+                },
+                icon: const Icon(Icons.add))
+          ]),
       body: ReorderableListView.builder(
         onReorder: (oldIndex, newIndex) => setState(
           () {
