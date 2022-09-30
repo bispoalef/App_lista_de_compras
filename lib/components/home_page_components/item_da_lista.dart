@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
-import 'package:lista_compras/view/editar_produto.dart';
 
 import '../../models/produto.dart';
+import 'edit_produto_dialog.dart';
 
 class ItemDaLista extends StatefulWidget {
   const ItemDaLista({
@@ -70,12 +70,8 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => EditarProduto(
-                        produto: widget.produto,
-                        list: widget.list,
-                      ),
-                    ));
+                    edit_produto_dialog(
+                        context, size, widget.produto!, widget.list!);
                   },
                   icon: const Icon(Icons.edit),
                 )

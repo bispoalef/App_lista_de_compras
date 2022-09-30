@@ -13,7 +13,7 @@ Future<dynamic> novoProdutoDialog(
     context: context,
     builder: (_) => AlertDialog(
       content: SizedBox(
-          height: size.height * 0.27,
+          height: size.height * 0.35,
           child: Column(
             children: [
               TextField(
