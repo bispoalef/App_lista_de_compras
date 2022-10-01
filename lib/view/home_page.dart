@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/components/home_page_components/item_da_lista.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
+import 'package:lista_compras/models/produto.dart';
 import 'package:provider/provider.dart';
 
 import '../components/home_page_components/novo_produto_dialog.dart';
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
     lista = Provider.of<ListaDeProdutos>(context);
     var size = MediaQuery.of(context).size;
 
+    List<Produto> carrinho = lista.getCarrinho;
+
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('Lista de Comptras')),
@@ -30,23 +33,56 @@ class _HomePageState extends State<HomePage> {
                 },
                 icon: const Icon(Icons.add))
           ]),
-      body: ReorderableListView.builder(
-        onReorder: (oldIndex, newIndex) => setState(
-          () {
-            final index = newIndex > oldIndex ? newIndex -= 1 : newIndex;
-            final prod = lista.getLista[oldIndex];
+      body: Column(
+        children: [
+          Flexible(
+            child: Container(
+              color: Colors.orange,
+              child: ReorderableListView.builder(
+                onReorder: (oldIndex, newIndex) => setState(
+                  () {
+                    final index =
+                        newIndex > oldIndex ? newIndex -= 1 : newIndex;
+                    final prod = lista.getLista[oldIndex];
 
-            lista.removerNoIndex(oldIndex);
-            lista.inserirNoIndex(index, prod);
-          },
-        ),
-        // separatorBuilder: (_, __) => const
-        itemCount: lista.getLista.length,
-        itemBuilder: ((context, index) => ItemDaLista(
-              key: ValueKey(lista.getLista[index]),
-              list: lista,
-              produto: lista.getLista[index],
-            )),
+                    lista.removerNoIndex(oldIndex);
+                    lista.inserirNoIndex(index, prod);
+                  },
+                ),
+                itemCount: lista.getLista.length,
+                itemBuilder: ((context, index) => ItemDaLista(
+                      key: ValueKey(lista.getLista[index]),
+                      list: lista,
+                      produto: lista.getLista[index],
+                    )),
+              ),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              color: Colors.yellow,
+              child: carrinho.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'Carrinho Vazio',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ))
+                  : ListView.builder(
+                      itemCount: carrinho.length,
+                      itemBuilder: (context, index) =>
+                          ItemDaLista(list: lista, produto: carrinho[index]),
+                    ),
+            ),
+          ),
+          Text('R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              )),
+        ],
       ),
     );
   }

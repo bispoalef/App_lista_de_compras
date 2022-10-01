@@ -5,9 +5,19 @@ import '../data/lista_mocada.dart';
 
 class ListaDeProdutos extends ChangeNotifier {
   final List<Produto> _list = listaMocada;
-  final List<Produto> carrinho = [];
+  final List<Produto> _carrinho = [];
 
+  List<Produto> get getCarrinho => [..._carrinho];
   List<Produto> get getLista => [..._list];
+
+  double valorTotalCarrinho() {
+    double total = 0;
+    for (var produto in _carrinho) {
+      total += produto.preco * produto.quantidade;
+    }
+    notifyListeners();
+    return total;
+  }
 
   void adicionarProduto(Produto produto) {
     _list.add(produto);
@@ -25,7 +35,7 @@ class ListaDeProdutos extends ChangeNotifier {
   }
 
   void removerProduto(Produto produto) {
-    carrinho.add(produto);
+    _carrinho.add(produto);
     _list.remove(produto);
     notifyListeners();
   }
