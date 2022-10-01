@@ -58,6 +58,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          Text('Total R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              )),
           Flexible(
             child: Container(
               color: Colors.yellow,
@@ -77,11 +82,6 @@ class _HomePageState extends State<HomePage> {
                     ),
             ),
           ),
-          Text('R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              )),
         ],
       ),
     );
