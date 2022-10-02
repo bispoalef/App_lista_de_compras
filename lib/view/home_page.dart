@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/components/home_page_components/item_da_lista.dart';
+import 'package:lista_compras/components/home_page_components/item_da_lista_carrinho.dart';
+import 'package:lista_compras/components/home_page_components/item_da_lista_pendente.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
 import 'package:lista_compras/models/produto.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 itemCount: lista.getLista.length,
-                itemBuilder: ((context, index) => ItemDaLista(
+                itemBuilder: ((context, index) => ItemDaListaPendente(
                       key: ValueKey(lista.getLista[index]),
                       list: lista,
                       produto: lista.getLista[index],
@@ -77,8 +78,8 @@ class _HomePageState extends State<HomePage> {
                     ))
                   : ListView.builder(
                       itemCount: carrinho.length,
-                      itemBuilder: (context, index) =>
-                          ItemDaLista(list: lista, produto: carrinho[index]),
+                      itemBuilder: (context, index) => ItemDaListaCarrinho(
+                          list: lista, produto: carrinho[index]),
                     ),
             ),
           ),

@@ -40,6 +40,13 @@ class ListaDeProdutos extends ChangeNotifier {
     notifyListeners();
   }
 
+  void restaurarProduto(Produto produto) {
+    _list.add(produto);
+
+    _carrinho.remove(produto);
+    notifyListeners();
+  }
+
   void editarProduto(
     Produto produto,
     String nome,

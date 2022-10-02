@@ -4,8 +4,8 @@ import 'package:lista_compras/models/lista_produtos.dart';
 import '../../models/produto.dart';
 import 'edit_produto_dialog.dart';
 
-class ItemDaLista extends StatefulWidget {
-  const ItemDaLista({
+class ItemDaListaCarrinho extends StatefulWidget {
+  const ItemDaListaCarrinho({
     Key? key,
     this.produto,
     this.list,
@@ -15,10 +15,10 @@ class ItemDaLista extends StatefulWidget {
   final ListaDeProdutos? list;
 
   @override
-  State<ItemDaLista> createState() => _ItemListaComponenteState();
+  State<ItemDaListaCarrinho> createState() => _ItemListaComponenteState();
 }
 
-class _ItemListaComponenteState extends State<ItemDaLista> {
+class _ItemListaComponenteState extends State<ItemDaListaCarrinho> {
   bool checkBox = false;
 
   @override
@@ -41,7 +41,7 @@ class _ItemListaComponenteState extends State<ItemDaLista> {
                     value: checkBox,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        widget.list!.removerProduto(widget.produto!);
+                        widget.list!.restaurarProduto(widget.produto!);
                       });
                     }),
                 Column(
