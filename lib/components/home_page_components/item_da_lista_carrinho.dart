@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
 
 import '../../models/produto.dart';
-import 'edit_produto_dialog.dart';
 
 class ItemDaListaCarrinho extends StatefulWidget {
   const ItemDaListaCarrinho({
@@ -66,14 +65,6 @@ class _ItemListaComponenteState extends State<ItemDaListaCarrinho> {
                       fontSize: 20,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.w400),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    edit_produto_dialog(
-                        context, size, widget.produto!, widget.list!);
-                  },
-                  icon: const Icon(Icons.edit),
                 )
               ],
             ),

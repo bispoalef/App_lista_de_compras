@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/components/home_page_components/item_da_lista_carrinho.dart';
 import 'package:lista_compras/components/home_page_components/item_da_lista_pendente.dart';
 import 'package:lista_compras/models/lista_produtos.dart';
 import 'package:lista_compras/models/produto.dart';
 import 'package:provider/provider.dart';
 
+import '../components/home_page_components/item_da_lista_carrinho.dart';
 import '../components/home_page_components/novo_produto_dialog.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,9 +17,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ListaDeProdutos lista = ListaDeProdutos();
 
+  bool mudar = true;
+
   @override
   Widget build(BuildContext context) {
+    void ocultarCarrinho() {
+      setState(() {
+        mudar = !mudar;
+      });
+    }
+
     lista = Provider.of<ListaDeProdutos>(context);
+
     var size = MediaQuery.of(context).size;
 
     List<Produto> carrinho = lista.getCarrinho;
@@ -36,7 +45,7 @@ class _HomePageState extends State<HomePage> {
           ]),
       body: Column(
         children: [
-          Flexible(
+          Expanded(
             child: Container(
               color: Colors.orange,
               child: ReorderableListView.builder(
@@ -59,28 +68,45 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Text('Total R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              )),
-          Flexible(
-            child: Container(
-              color: Colors.yellow,
-              child: carrinho.isEmpty
-                  ? const Center(
-                      child: Text(
-                      'Carrinho Vazio',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+          GestureDetector(
+            onTap: ocultarCarrinho,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    'Total R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    )),
+                const SizedBox(width: 15),
+                Icon(mudar
+                    ? Icons.keyboard_double_arrow_up_outlined
+                    : Icons.keyboard_double_arrow_down_outlined)
+              ],
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(seconds: 1),
+            height: mudar ? 0 : size.height / 2,
+            child: Flexible(
+              child: Container(
+                color: Colors.yellow,
+                child: carrinho.isEmpty
+                    ? const Center(
+                        child: Text(
+                        'Carrinho Vazio',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ))
+                    : ListView.builder(
+                        itemCount: carrinho.length,
+                        itemBuilder: (context, index) => ItemDaListaCarrinho(
+                            list: lista, produto: carrinho[index]),
                       ),
-                    ))
-                  : ListView.builder(
-                      itemCount: carrinho.length,
-                      itemBuilder: (context, index) => ItemDaListaCarrinho(
-                          list: lista, produto: carrinho[index]),
-                    ),
+              ),
             ),
           ),
         ],
