@@ -17,21 +17,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ListaDeProdutos lista = ListaDeProdutos();
 
-  bool mudar = true;
-
   @override
   Widget build(BuildContext context) {
-    void ocultarCarrinho() {
-      setState(() {
-        mudar = !mudar;
-      });
-    }
-
     lista = Provider.of<ListaDeProdutos>(context);
 
     var size = MediaQuery.of(context).size;
 
     List<Produto> carrinho = lista.getCarrinho;
+
+    bool mudar = lista.getEstado;
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           GestureDetector(
-            onTap: ocultarCarrinho,
+            onTap: lista.ocultarCarrinho,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -89,24 +83,22 @@ class _HomePageState extends State<HomePage> {
           AnimatedContainer(
             duration: const Duration(seconds: 1),
             height: mudar ? 0 : size.height / 2,
-            child: Flexible(
-              child: Container(
-                color: Colors.yellow,
-                child: carrinho.isEmpty
-                    ? const Center(
-                        child: Text(
-                        'Carrinho Vazio',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ))
-                    : ListView.builder(
-                        itemCount: carrinho.length,
-                        itemBuilder: (context, index) => ItemDaListaCarrinho(
-                            list: lista, produto: carrinho[index]),
+            child: Container(
+              color: Colors.yellow,
+              child: carrinho.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'Carrinho Vazio',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
                       ),
-              ),
+                    ))
+                  : ListView.builder(
+                      itemCount: carrinho.length,
+                      itemBuilder: (context, index) => ItemDaListaCarrinho(
+                          list: lista, produto: carrinho[index]),
+                    ),
             ),
           ),
         ],

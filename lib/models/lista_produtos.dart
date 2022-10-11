@@ -6,9 +6,16 @@ import '../data/lista_mocada.dart';
 class ListaDeProdutos extends ChangeNotifier {
   final List<Produto> _list = listaMocada;
   final List<Produto> _carrinho = [];
+  bool _mudarEstado = true;
 
   List<Produto> get getCarrinho => [..._carrinho];
   List<Produto> get getLista => [..._list];
+  get getEstado => _mudarEstado;
+
+  void ocultarCarrinho() {
+    _mudarEstado = !_mudarEstado;
+    notifyListeners();
+  }
 
   double valorTotalCarrinho() {
     double total = 0;
