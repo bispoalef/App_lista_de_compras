@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/models/lista_produtos.dart';
-import 'package:lista_compras/view/home_page.dart';
+import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
+import 'package:lista_compras/features/compras/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {

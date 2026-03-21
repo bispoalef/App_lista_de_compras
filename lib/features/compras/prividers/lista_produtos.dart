@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lista_compras/models/produto.dart';
+import 'package:lista_compras/features/compras/models/produto.dart';
 
 import '../data/lista_mocada.dart';
 

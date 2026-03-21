@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/models/lista_produtos.dart';
+import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
 
 import '../../models/produto.dart';
-import 'edit_produto_dialog.dart';
 
-class ItemDaListaPendente extends StatefulWidget {
-  const ItemDaListaPendente({
+class ItemDaListaCarrinho extends StatefulWidget {
+  const ItemDaListaCarrinho({
     Key? key,
     this.produto,
     this.list,
@@ -15,10 +14,10 @@ class ItemDaListaPendente extends StatefulWidget {
   final ListaDeProdutos? list;
 
   @override
-  State<ItemDaListaPendente> createState() => _ItemListaComponenteState();
+  State<ItemDaListaCarrinho> createState() => _ItemListaComponenteState();
 }
 
-class _ItemListaComponenteState extends State<ItemDaListaPendente> {
+class _ItemListaComponenteState extends State<ItemDaListaCarrinho> {
   bool checkBox = false;
 
   @override
@@ -41,7 +40,7 @@ class _ItemListaComponenteState extends State<ItemDaListaPendente> {
                     value: checkBox,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        widget.list!.removerProduto(widget.produto!);
+                        widget.list!.restaurarProduto(widget.produto!);
                       });
                     }),
                 Column(
@@ -66,14 +65,6 @@ class _ItemListaComponenteState extends State<ItemDaListaPendente> {
                       fontSize: 20,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.w400),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    edit_produto_dialog(
-                        context, size, widget.produto!, widget.list!);
-                  },
-                  icon: const Icon(Icons.edit),
                 )
               ],
             ),

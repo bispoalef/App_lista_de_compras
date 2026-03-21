@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/components/home_page_components/item_da_lista_pendente.dart';
-import 'package:lista_compras/models/lista_produtos.dart';
-import 'package:lista_compras/models/produto.dart';
+import 'package:lista_compras/features/compras/view/widgets/item_da_lista_pendente.dart';
+import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
+import 'package:lista_compras/features/compras/models/produto.dart';
 import 'package:provider/provider.dart';
 
-import '../components/home_page_components/item_da_lista_carrinho.dart';
-import '../components/home_page_components/novo_produto_dialog.dart';
+import '../widgets/item_da_lista_carrinho.dart';
+import '../widgets/novo_produto_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

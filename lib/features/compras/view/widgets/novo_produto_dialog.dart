@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:lista_compras/models/lista_produtos.dart';
-import 'package:lista_compras/models/produto.dart';
+import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
+import 'package:lista_compras/features/compras/models/produto.dart';
 
 Future<dynamic> novoProdutoDialog(
     BuildContext context, Size size, ListaDeProdutos lista) {
