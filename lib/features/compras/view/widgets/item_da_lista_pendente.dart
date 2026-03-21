@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
+import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
 
 import '../../models/produto.dart';
 import 'edit_produto_dialog.dart';

@@ -1,9 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Produto {
-  int id;
-  String nome;
-  double preco;
-  int quantidade;
+  final String id;
+  final String nome;
+  final double preco;
+  final int quantidade;
+
   Produto({
     required this.id,
     required this.nome,
@@ -11,11 +11,20 @@ class Produto {
     required this.quantidade,
   });
 
-  set setNome(nome) => this.nome = nome;
-
-  set setPreco(preco) => this.preco = preco;
-
-  set setQuantidade(quantidade) => this.quantidade = quantidade;
+  // O método copyWith é o padrão da indústria para atualizar estados imutáveis
+  Produto copyWith({
+    String? id,
+    String? nome,
+    double? preco,
+    int? quantidade,
+  }) {
+    return Produto(
+      id: id ?? this.id,
+      nome: nome ?? this.nome,
+      preco: preco ?? this.preco,
+      quantidade: quantidade ?? this.quantidade,
+    );
+  }
 
   @override
   String toString() {

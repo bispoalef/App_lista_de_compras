@@ -4,13 +4,13 @@ import 'package:lista_compras/features/compras/models/produto.dart';
 import '../data/lista_mocada.dart';
 
 class ListaDeProdutos extends ChangeNotifier {
-  final List<Produto> _list = listaMocada;
+  final List<Produto> _list = List.from(listaMocada);
   final List<Produto> _carrinho = [];
   bool _mudarEstado = true;
 
   List<Produto> get getCarrinho => [..._carrinho];
   List<Produto> get getLista => [..._list];
-  get getEstado => _mudarEstado;
+  bool get getEstado => _mudarEstado;
 
   void ocultarCarrinho() {
     _mudarEstado = !_mudarEstado;
@@ -22,7 +22,6 @@ class ListaDeProdutos extends ChangeNotifier {
     for (var produto in _carrinho) {
       total += produto.preco * produto.quantidade;
     }
-    notifyListeners();
     return total;
   }
 
@@ -43,27 +42,33 @@ class ListaDeProdutos extends ChangeNotifier {
 
   void removerProduto(Produto produto) {
     _carrinho.add(produto);
-    _list.remove(produto);
+    _list.removeWhere((p) => p.id == produto.id);
     notifyListeners();
   }
 
   void restaurarProduto(Produto produto) {
     _list.add(produto);
 
-    _carrinho.remove(produto);
+    _carrinho.removeWhere((p) => p.id == produto.id);
     notifyListeners();
   }
 
   void editarProduto(
-    Produto produto,
+    Produto produtoAntigo,
     String nome,
     double preco,
     int quantidade,
   ) {
-    produto.setNome = nome;
-    produto.setPreco = preco;
-    produto.setQuantidade = quantidade;
+    final index = _list.indexWhere((p) => p.id == produtoAntigo.id);
 
-    notifyListeners();
+    if (index != -1) {
+      _list[index] = produtoAntigo.copyWith(
+        nome: nome,
+        preco: preco,
+        quantidade: quantidade,
+      );
+
+      notifyListeners();
+    }
   }
 }

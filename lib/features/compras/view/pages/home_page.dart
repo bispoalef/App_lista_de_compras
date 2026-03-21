@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/features/compras/view/widgets/item_da_lista_pendente.dart';
-import 'package:lista_compras/features/compras/prividers/lista_produtos.dart';
+import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
 import 'package:lista_compras/features/compras/models/produto.dart';
 import 'package:provider/provider.dart';
 
