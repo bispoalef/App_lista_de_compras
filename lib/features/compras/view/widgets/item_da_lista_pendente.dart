@@ -1,88 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
 
 import '../../models/produto.dart';
+import '../../providers/lista_produtos.dart';
 import 'edit_produto_dialog.dart';
 
-class ItemDaListaPendente extends StatefulWidget {
+class ItemDaListaPendente extends StatelessWidget {
+  final Produto produto;
+  final ListaDeProdutos list;
+
   const ItemDaListaPendente({
     Key? key,
-    this.produto,
-    this.list,
+    required this.produto,
+    required this.list,
   }) : super(key: key);
-
-  final Produto? produto;
-  final ListaDeProdutos? list;
-
-  @override
-  State<ItemDaListaPendente> createState() => _ItemListaComponenteState();
-}
-
-class _ItemListaComponenteState extends State<ItemDaListaPendente> {
-  bool checkBox = false;
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.orangeAccent,
-          borderRadius: BorderRadius.circular(10),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: Checkbox(
+          value: false,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          onChanged: (bool? newValue) {
+            list.removerProduto(produto);
+          },
         ),
-        height: size.height * 0.07,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                    value: checkBox,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        widget.list!.removerProduto(widget.produto!);
-                      });
-                    }),
-                Column(
-                  children: [
-                    Text(
-                      widget.produto!.nome,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 17),
-                    ),
-                    Text(
-                      'Quantidade ${widget.produto!.quantidade}',
-                      style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ],
-                ),
-                Container(width: 20),
-                Text(
-                  'R\$ ${widget.produto!.preco.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w400),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => EditProdutoDialog(
-                        produto: widget.produto!,
-                        lista: widget.list!,
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.edit),
-                )
-              ],
-            ),
-          ],
+        title: Text(
+          produto.nome,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        subtitle: Text(
+          'Qtd: ${produto.quantidade}  •  R\$ ${produto.preco.toStringAsFixed(2)}',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.edit_outlined,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => EditProdutoDialog(
+                produto: produto,
+                lista: list,
+              ),
+            );
+          },
         ),
       ),
     );

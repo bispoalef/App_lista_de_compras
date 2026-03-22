@@ -1,74 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
 
 import '../../models/produto.dart';
+import '../../providers/lista_produtos.dart';
 
-class ItemDaListaCarrinho extends StatefulWidget {
+class ItemDaListaCarrinho extends StatelessWidget {
+  final Produto produto;
+  final ListaDeProdutos list;
+
   const ItemDaListaCarrinho({
     Key? key,
-    this.produto,
-    this.list,
+    required this.produto,
+    required this.list,
   }) : super(key: key);
-
-  final Produto? produto;
-  final ListaDeProdutos? list;
-
-  @override
-  State<ItemDaListaCarrinho> createState() => _ItemListaComponenteState();
-}
-
-class _ItemListaComponenteState extends State<ItemDaListaCarrinho> {
-  bool checkBox = false;
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.orangeAccent,
-          borderRadius: BorderRadius.circular(10),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      elevation: 0,
+      color: Theme.of(context)
+          .colorScheme
+          .surfaceContainerHighest
+          .withValues(alpha: 0.5),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        leading: Checkbox(
+          value: true,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          onChanged: (bool? newValue) {
+            list.restaurarProduto(produto);
+          },
         ),
-        height: size.height * 0.07,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                    value: checkBox,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        widget.list!.restaurarProduto(widget.produto!);
-                      });
-                    }),
-                Column(
-                  children: [
-                    Text(
-                      widget.produto!.nome,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 17),
-                    ),
-                    Text(
-                      'Quantidade ${widget.produto!.quantidade}',
-                      style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ],
-                ),
-                Container(width: 20),
-                Text(
-                  'R\$ ${widget.produto!.preco.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w400),
-                )
-              ],
-            ),
-          ],
+        title: Text(
+          produto.nome,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            decoration: TextDecoration.lineThrough,
+          ),
+        ),
+        subtitle: Text('Qtd: ${produto.quantidade}'),
+        trailing: Text(
+          'R\$ ${produto.preco.toStringAsFixed(2)}',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

@@ -1,111 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/features/compras/view/widgets/item_da_lista_pendente.dart';
-import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
-import 'package:lista_compras/features/compras/models/produto.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/lista_produtos.dart';
 import '../widgets/item_da_lista_carrinho.dart';
+import '../widgets/item_da_lista_pendente.dart';
 import '../widgets/novo_produto_dialog.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late ListaDeProdutos lista = ListaDeProdutos();
-
-  @override
   Widget build(BuildContext context) {
-    lista = Provider.of<ListaDeProdutos>(context);
+    final lista = Provider.of<ListaDeProdutos>(context);
+    final size = MediaQuery.of(context).size;
 
-    var size = MediaQuery.of(context).size;
-
-    List<Produto> carrinho = lista.getCarrinho;
-
-    bool mudar = lista.getEstado;
+    final carrinho = lista.getCarrinho;
+    final pendentes = lista.getLista;
+    final carrinhoOculto = lista.getEstado;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-          title: const Center(child: Text('Lista de Comptras')),
-          actions: [
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => NovoProdutoDialog(lista: lista),
-                );
-              },
-              icon: const Icon(Icons.add),
-            )
-          ]),
+        title: const Text('Lista de Compras'),
+      ),
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              color: Colors.orange,
-              child: ReorderableListView.builder(
-                onReorder: (oldIndex, newIndex) => setState(
-                  () {
-                    final index =
-                        newIndex > oldIndex ? newIndex -= 1 : newIndex;
-                    final prod = lista.getLista[oldIndex];
-
-                    lista.removerNoIndex(oldIndex);
-                    lista.inserirNoIndex(index, prod);
-                  },
-                ),
-                itemCount: lista.getLista.length,
-                itemBuilder: ((context, index) => ItemDaListaPendente(
-                      key: ValueKey(lista.getLista[index]),
-                      list: lista,
-                      produto: lista.getLista[index],
-                    )),
-              ),
-            ),
+            child: pendentes.isEmpty
+                ? Center(
+                    child: Text(
+                      'Tudo comprado!',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  )
+                : ReorderableListView.builder(
+                    padding: const EdgeInsets.only(top: 8, bottom: 80),
+                    onReorder: (oldIndex, newIndex) {
+                      final index =
+                          newIndex > oldIndex ? newIndex - 1 : newIndex;
+                      final prod = pendentes[oldIndex];
+                      lista.removerNoIndex(oldIndex);
+                      lista.inserirNoIndex(index, prod);
+                    },
+                    itemCount: pendentes.length,
+                    itemBuilder: (context, index) {
+                      final produto = pendentes[index];
+                      return ItemDaListaPendente(
+                        key: ValueKey(produto.id),
+                        list: lista,
+                        produto: produto,
+                      );
+                    },
+                  ),
           ),
-          GestureDetector(
-            onTap: lista.ocultarCarrinho,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(28)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                    'Total R\$${lista.valorTotalCarrinho().toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(width: 15),
-                Icon(mudar
-                    ? Icons.keyboard_double_arrow_up_outlined
-                    : Icons.keyboard_double_arrow_down_outlined)
+                InkWell(
+                  onTap: lista.ocultarCarrinho,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Carrinho: R\$ ${lista.valorTotalCarrinho().toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(carrinhoOculto
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded),
+                      ],
+                    ),
+                  ),
+                ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  height: carrinhoOculto ? 0 : size.height * 0.4,
+                  child: carrinho.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Carrinho Vazio',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          itemCount: carrinho.length,
+                          itemBuilder: (context, index) => ItemDaListaCarrinho(
+                            list: lista,
+                            produto: carrinho[index],
+                          ),
+                        ),
+                ),
               ],
             ),
           ),
-          AnimatedContainer(
-            duration: const Duration(seconds: 1),
-            height: mudar ? 0 : size.height / 2,
-            child: Container(
-              color: Colors.yellow,
-              child: carrinho.isEmpty
-                  ? const Center(
-                      child: Text(
-                      'Carrinho Vazio',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ))
-                  : ListView.builder(
-                      itemCount: carrinho.length,
-                      itemBuilder: (context, index) => ItemDaListaCarrinho(
-                          list: lista, produto: carrinho[index]),
-                    ),
-            ),
-          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => NovoProdutoDialog(lista: lista),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
