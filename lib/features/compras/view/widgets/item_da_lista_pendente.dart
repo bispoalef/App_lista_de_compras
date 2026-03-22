@@ -70,8 +70,13 @@ class _ItemListaComponenteState extends State<ItemDaListaPendente> {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    edit_produto_dialog(
-                        context, size, widget.produto!, widget.list!);
+                    showDialog(
+                      context: context,
+                      builder: (context) => EditProdutoDialog(
+                        produto: widget.produto!,
+                        lista: widget.list!,
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.edit),
                 )

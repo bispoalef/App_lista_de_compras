@@ -32,10 +32,14 @@ class _HomePageState extends State<HomePage> {
           title: const Center(child: Text('Lista de Comptras')),
           actions: [
             IconButton(
-                onPressed: () {
-                  novoProdutoDialog(context, size, lista);
-                },
-                icon: const Icon(Icons.add))
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => NovoProdutoDialog(lista: lista),
+                );
+              },
+              icon: const Icon(Icons.add),
+            )
           ]),
       body: Column(
         children: [
