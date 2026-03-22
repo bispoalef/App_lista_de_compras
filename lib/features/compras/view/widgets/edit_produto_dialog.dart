@@ -1,54 +1,107 @@
 import 'package:flutter/material.dart';
-import 'package:lista_compras/features/compras/providers/lista_produtos.dart';
-import 'package:lista_compras/features/compras/models/produto.dart';
 
-Future<dynamic> edit_produto_dialog(
-    BuildContext context, Size size, Produto produto, ListaDeProdutos list) {
-  TextEditingController controllerNome = TextEditingController();
-  TextEditingController controllerQuantidade = TextEditingController();
-  TextEditingController controllerPreco = TextEditingController();
+import '../../models/produto.dart';
+import '../../providers/lista_produtos.dart';
 
-  controllerNome.text = produto.nome;
-  controllerPreco.text = '${produto.preco}';
-  controllerQuantidade.text = '${produto.quantidade}';
+class EditProdutoDialog extends StatefulWidget {
+  final Produto produto;
+  final ListaDeProdutos lista;
 
-  void Salvar() {
-    String nome = controllerNome.text;
-    double preco = double.parse(controllerPreco.text);
-    int quantidade = int.parse(controllerQuantidade.text);
-    list.editarProduto(
-      produto,
+  const EditProdutoDialog({
+    Key? key,
+    required this.produto,
+    required this.lista,
+  }) : super(key: key);
+
+  @override
+  State<EditProdutoDialog> createState() => _EditProdutoDialogState();
+}
+
+class _EditProdutoDialogState extends State<EditProdutoDialog> {
+  late final TextEditingController _nomeController;
+  late final TextEditingController _quantidadeController;
+  late final TextEditingController _precoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.produto.nome);
+    _quantidadeController =
+        TextEditingController(text: widget.produto.quantidade.toString());
+    _precoController =
+        TextEditingController(text: widget.produto.preco.toString());
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _quantidadeController.dispose();
+    _precoController.dispose();
+    super.dispose();
+  }
+
+  void _salvar() {
+    if (_nomeController.text.isEmpty ||
+        _quantidadeController.text.isEmpty ||
+        _precoController.text.isEmpty) {
+      return;
+    }
+
+    final nome = _nomeController.text;
+    final quantidade = int.tryParse(_quantidadeController.text) ?? 0;
+    final preco = double.tryParse(_precoController.text) ?? 0.0;
+
+    if (quantidade <= 0 || preco <= 0) return;
+
+    widget.lista.editarProduto(
+      widget.produto,
       nome,
       preco,
       quantidade,
     );
+
     Navigator.of(context).pop();
   }
 
-  return showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-            content: SizedBox(
-                height: size.height * 0.35,
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: const InputDecoration(label: Text('Nome')),
-                      controller: controllerNome,
-                    ),
-                    TextField(
-                      decoration: const InputDecoration(label: Text('Preço')),
-                      controller: controllerPreco,
-                    ),
-                    TextField(
-                      decoration:
-                          const InputDecoration(label: Text('Quantidade')),
-                      controller: controllerQuantidade,
-                    ),
-                    Container(height: 20),
-                    ElevatedButton(
-                        onPressed: Salvar, child: const Text('Salvar'))
-                  ],
-                )),
-          ));
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Editar Produto'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nomeController,
+              decoration: const InputDecoration(labelText: 'Nome do Produto'),
+              textCapitalization: TextCapitalization.sentences,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _quantidadeController,
+              decoration: const InputDecoration(labelText: 'Quantidade'),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _precoController,
+              decoration: const InputDecoration(labelText: 'Preço Unitário'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: _salvar,
+          child: const Text('Salvar Alterações'),
+        ),
+      ],
+    );
+  }
 }
