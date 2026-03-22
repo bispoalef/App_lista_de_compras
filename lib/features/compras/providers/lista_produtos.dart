@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lista_compras/features/compras/models/produto.dart';
 
 import '../data/lista_mocada.dart';
+import '../models/produto.dart';
 
 class ListaDeProdutos extends ChangeNotifier {
   final List<Produto> _list = List.from(listaMocada);
@@ -35,7 +35,7 @@ class ListaDeProdutos extends ChangeNotifier {
     notifyListeners();
   }
 
-  removerNoIndex(int index) {
+  void removerNoIndex(int index) {
     _list.removeAt(index);
     notifyListeners();
   }
@@ -48,7 +48,6 @@ class ListaDeProdutos extends ChangeNotifier {
 
   void restaurarProduto(Produto produto) {
     _list.add(produto);
-
     _carrinho.removeWhere((p) => p.id == produto.id);
     notifyListeners();
   }
